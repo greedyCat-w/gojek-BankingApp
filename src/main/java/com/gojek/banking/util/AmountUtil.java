@@ -12,18 +12,26 @@ public class AmountUtil {
         String[] inputs = inputAmount.split(" ");
         if(inputs.length>2) return 0;
         double amount = 0;
-        for(String input: inputs){
-            if(input.isEmpty()) continue;
-            if(Character.isDigit(input.charAt(input.length()-1))){
-                throw new InvalidInputAmountException(inputAmount);
+        try {
+            for (String input : inputs) {
+                if (input.isEmpty()) continue;
+                char exponent = input.charAt(input.length()-1);
+                if (isValidExponent(exponent)) {
+                    throw new InvalidInputAmountException(inputAmount);
+                }
+                long curr = Long.parseLong(input.substring(0, input.length() - 1));
+                if (exponent == 'C') {
+                    amount += (double) curr / Math.min(100, Math.pow(10, input.length() - 1));
+                } else amount += curr;
             }
-            char exponent = input.charAt(input.length()-1);
-            long curr = Long.parseLong(input.substring(0,input.length()-1));
-            if(exponent=='C'){
-                amount += (double)curr/Math.min(100,Math.pow(10,input.length()-1));
-            }else amount += curr;
+        }catch (NumberFormatException ex){
+            throw new InvalidInputAmountException(inputAmount);
         }
         return amount;
+    }
+
+    private static boolean isValidExponent(char exponent) {
+        return !Character.isDigit(exponent)&&(exponent=='C'||exponent=='D');
     }
 
     public static String getAmountInString(double amount) {

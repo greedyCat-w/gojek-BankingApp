@@ -25,18 +25,20 @@ public class BankingApplication {
         initBank(options);
         while(true){
             PromptUtil.printOptions(options);
-            int option = Integer.parseInt(PromptUtil.getInput());
-            if(option<1||option>options.size()){
-                PromptUtil.print("Invalid option "+option);
-                continue;
-            }
-            try {
+            try{
+                int option = Integer.parseInt(PromptUtil.getInput());
+                if(option<1||option>options.size()){
+                    PromptUtil.print("Invalid option "+option);
+                    continue;
+                }
                 String balance = options.get(option-1).process();
-                PromptUtil.print(" Balance - "+balance);
+                PromptUtil.print(" Balance -> "+balance);
             } catch (InvalidInputAmountException ex){
                 PromptUtil.print(" Invalid amount entered "+ex.getMessage());
             } catch (MaxBalanceExceeded ex){
                 PromptUtil.print(" Maximum allowed balance is "+ AMOUNT_LIMIT.MAX_BALANCE.getVal());
+            } catch (NumberFormatException ex){
+                PromptUtil.print("Invalid Option Entered");
             }
         }
     }
