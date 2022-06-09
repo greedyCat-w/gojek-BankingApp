@@ -7,6 +7,8 @@ import com.gojek.banking.util.AmountUtil;
 import com.gojek.banking.util.PromptUtil;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 public class Debit implements BaseOperation {
 
@@ -24,7 +26,7 @@ public class Debit implements BaseOperation {
         User user = userRepo.findByUserId(1);
         BigDecimal currBalance = BigDecimal.valueOf(user.getBalance());
         currBalance = currBalance.subtract(new BigDecimal(amount));
-        user.setBalance(currBalance.doubleValue());
+        user.setBalance(currBalance.round(new MathContext(2, RoundingMode.HALF_UP)).doubleValue());
         userRepo.saveUser(user);
         return AmountUtil.getAmountInString(user.getBalance());
     }

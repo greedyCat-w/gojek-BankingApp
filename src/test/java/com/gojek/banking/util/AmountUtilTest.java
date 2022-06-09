@@ -17,6 +17,7 @@ class AmountUtilTest {
         assertEquals(0,AmountUtil.getAmountInDouble("   "));
         assertThrows(InvalidInputAmountException.class,()->AmountUtil.getAmountInDouble("53"));
         assertDoesNotThrow(()->AmountUtil.getAmountInDouble(" "));
+        assertThrows(InvalidInputAmountException.class,()->AmountUtil.getAmountInDouble("#%#D 3#%#C"));
     }
 
     @Test

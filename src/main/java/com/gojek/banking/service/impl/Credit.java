@@ -9,6 +9,8 @@ import com.gojek.banking.util.AmountUtil;
 import com.gojek.banking.util.PromptUtil;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 public class Credit implements BaseOperation {
 
@@ -29,9 +31,9 @@ public class Credit implements BaseOperation {
         if(currBalance.doubleValue()> AMOUNT_LIMIT.MAX_BALANCE.getVal()){
             throw new MaxBalanceExceeded(currBalance.doubleValue());
         }
-        user.setBalance(currBalance.doubleValue());
+        user.setBalance(currBalance.round(new MathContext(2, RoundingMode.HALF_UP)).doubleValue());
         userRepo.saveUser(user);
-        return AmountUtil.getAmountInString(user.getBalance());
+        return AmountUtil.getAmountInString(currBalance.doubleValue());
     }
 
     @Override

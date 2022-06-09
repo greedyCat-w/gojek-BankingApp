@@ -16,7 +16,7 @@ public class AmountUtil {
             for (String input : inputs) {
                 if (input.isEmpty()) continue;
                 char exponent = input.charAt(input.length()-1);
-                if (isValidExponent(exponent)) {
+                if (!isValidExponent(exponent)) {
                     throw new InvalidInputAmountException(inputAmount);
                 }
                 long curr = Long.parseLong(input.substring(0, input.length() - 1));
@@ -31,7 +31,7 @@ public class AmountUtil {
     }
 
     private static boolean isValidExponent(char exponent) {
-        return !Character.isDigit(exponent)&&(exponent=='C'||exponent=='D');
+        return !(Character.isDigit(exponent)&&exponent!='C'&&exponent!='D');
     }
 
     public static String getAmountInString(double amount) {
